@@ -26,6 +26,16 @@ defmodule Buraco.Server do
     GenServer.call(__MODULE__, {:get, key})
   end
 
+  @doc """
+  Stores `value` under `key` asynchronously.
+
+  Returns `:ok`after sending the request to the server.
+  """
+  @spec put(term(), term()) :: :ok
+  def put(key, value) do
+    GenServer.cast(__MODULE__, {:put, key, value})
+  end
+
   @impl true
   def init(_opts) do
     {:ok, %{}}
@@ -36,5 +46,12 @@ defmodule Buraco.Server do
     value = Map.get(state, key)
 
     {:reply, value, state}
+  end
+
+  @impl true
+  def handle_cast({:put, key, value}, state) do
+    new_state = Map.put(state, key, value)
+
+    {:noreply, new_state}
   end
 end
