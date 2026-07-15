@@ -36,6 +36,11 @@ defmodule Buraco.Server do
     GenServer.cast(__MODULE__, {:put, key, value})
   end
 
+  @doc """
+  Deletes the value associated with `key` asynchronously.
+
+  Deleting a key that does not exist leaves the store unchanged.
+  """
   @spec delete(term()) :: :ok
   def delete(key) do
     GenServer.cast(__MODULE__, {:delete, key})
@@ -56,6 +61,13 @@ defmodule Buraco.Server do
   @impl true
   def handle_cast({:put, key, value}, state) do
     new_state = Map.put(state, key, value)
+
+    {:noreply, new_state}
+  end
+
+  @impl true
+  def handle_cast({:delete, key}, state) do
+    new_state = Map.delete(state, key)
 
     {:noreply, new_state}
   end
