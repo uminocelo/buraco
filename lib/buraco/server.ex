@@ -36,6 +36,11 @@ defmodule Buraco.Server do
     GenServer.cast(__MODULE__, {:put, key, value})
   end
 
+  @spec delete(term()) :: :ok
+  def delete(key) do
+    GenServer.cast(__MODULE__, {:delete, key})
+  end
+
   @impl true
   def init(_opts) do
     {:ok, %{}}
