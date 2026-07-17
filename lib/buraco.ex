@@ -15,6 +15,10 @@ defmodule Buraco do
   The `Buraco.Server` process must be running before these functions are used.
   """
 
+  @type key :: term()
+  @type value :: term()
+  @type server :: GenServer.server()
+
   @doc """
   Stores `value` under `key`.
 
@@ -24,7 +28,15 @@ defmodule Buraco do
   """
   @spec put(term(), term()) :: :ok
   def put(key, value) do
-    Buraco.Server.put(key, value)
+    put(Buraco.Server, key, value)
+  end
+
+  @doc """
+  Stores `value` under `key` in the specified server.
+  """
+  @spec put(server(), key(), value()) :: :ok
+  def put(server, key, value) do
+    Buraco.Server.put(server, key, value)
   end
 
   @doc """
@@ -33,7 +45,17 @@ defmodule Buraco do
   """
   @spec get(term()) :: term() | nil
   def get(key) do
-    Buraco.Server.get(key)
+    get(Buraco.Server, key)
+  end
+
+  @doc """
+  Retrivies the value associated with `key` from the specified server.
+
+  Returns `nil` when the key does not exists.
+  """
+  @spec get(server(), key()) :: term() | nil
+  def get(server, key) do
+    Buraco.Server.get(server, key)
   end
 
   @doc """
@@ -43,6 +65,14 @@ defmodule Buraco do
   """
   @spec delete(term()) :: :ok
   def delete(key) do
-    Buraco.Server.delete(key)
+    delete(Buraco.Server, key)
+  end
+
+  @doc """
+  Deletes `key` from specified server.
+  """
+  @spec delete(server(), key()) :: :ok
+  def delete(server, key) do
+    Buraco.Server.delete(server, key)
   end
 end

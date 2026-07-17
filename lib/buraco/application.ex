@@ -8,12 +8,9 @@ defmodule Buraco.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: Buraco.Worker.start_link(arg)
-      # {Buraco.Worker, arg}
+      {Buraco.Server, []}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Buraco.Supervisor]
     Supervisor.start_link(children, opts)
   end

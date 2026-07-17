@@ -5,6 +5,8 @@ defmodule Buraco.Server do
     GenServer responsibable for maintaining the in-memory key-value store.
   """
 
+  @type server :: GenServer.server()
+
   @doc """
   Starts the key-value store process.
 
@@ -13,7 +15,9 @@ defmodule Buraco.Server do
 
   @spec start_link(keyword()) :: GenServer.on_start()
   def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+    name = Keyword.get(opts, :name, __MODULE__)
+
+    GenServer.start_link(__MODULE__, %{}, name: name)
   end
 
   @doc """
@@ -23,7 +27,12 @@ defmodule Buraco.Server do
   """
   @spec get(term()) :: term() | nil
   def get(key) do
-    GenServer.call(__MODULE__, {:get, key})
+    get(__MODULE__, key)
+  end
+
+  @spec get(server(), term()) :: term() | nil
+  def get(server, key) do
+    GenServer.call(server, {:get, key})
   end
 
   @doc """
@@ -33,7 +42,12 @@ defmodule Buraco.Server do
   """
   @spec put(term(), term()) :: :ok
   def put(key, value) do
-    GenServer.cast(__MODULE__, {:put, key, value})
+    put(__MODULE__, key, value)
+  end
+
+  @spec put(server(), term(), term()) :: :ok
+  def put(server, key, value) do
+    GenServer.cast(server, {:put, key, value})
   end
 
   @doc """
@@ -43,12 +57,17 @@ defmodule Buraco.Server do
   """
   @spec delete(term()) :: :ok
   def delete(key) do
-    GenServer.cast(__MODULE__, {:delete, key})
+    delete(__MODULE__, key)
+  end
+
+  @spec delete(server(), term()) :: :ok
+  def delete(server, key) do
+    GenServer.cast(server, {:delete, key})
   end
 
   @impl true
-  def init(_opts) do
-    {:ok, %{}}
+  def init(initial_state) do
+    {:ok, initial_state}
   end
 
   @impl true
