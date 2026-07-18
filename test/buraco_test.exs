@@ -1,5 +1,5 @@
 defmodule BuracoTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   setup do
     server_name = {:global, {__MODULE__, self(), make_ref()}}
@@ -68,6 +68,18 @@ defmodule BuracoTest do
       assert Buraco.get(server, :language) == "Elixir"
       assert Buraco.get(server, :runtime) == nil
       assert Buraco.get(server, :framework) == "Phoenix"
+    end
+  end
+
+  describe "isolated" do
+    test "isolated example", %{server: server} do
+      :ok = Buraco.put(server, :shared_key, "first key")
+
+      assert Buraco.get(server, :shared_key) == "first key"
+    end
+
+    test "second isolated example", %{server: server} do
+      assert Buraco.get(server, :shared_key) == nil
     end
   end
 end

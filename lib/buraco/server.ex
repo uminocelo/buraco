@@ -47,7 +47,7 @@ defmodule Buraco.Server do
 
   @spec put(server(), term(), term()) :: :ok
   def put(server, key, value) do
-    GenServer.cast(server, {:put, key, value})
+    GenServer.call(server, {:put, key, value})
   end
 
   @doc """
@@ -62,7 +62,7 @@ defmodule Buraco.Server do
 
   @spec delete(server(), term()) :: :ok
   def delete(server, key) do
-    GenServer.cast(server, {:delete, key})
+    GenServer.call(server, {:delete, key})
   end
 
   @impl true
@@ -75,6 +75,20 @@ defmodule Buraco.Server do
     value = Map.get(state, key)
 
     {:reply, value, state}
+  end
+
+  @impl true
+  def handle_call({:put, key, value}, _from, state) do
+    new_state = Map.put(state, key, value)
+
+    {:reply, :ok, new_state}
+  end
+
+  @impl true
+  def handle_call({:delete, key}, _from, state) do
+    new_state = Map.delete(state, key)
+
+    {:reply, :ok, new_state}
   end
 
   @impl true
