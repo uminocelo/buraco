@@ -40,6 +40,24 @@ defmodule Buraco do
   end
 
   @doc """
+  Stores `value` under `key` asynchronously in the default server.
+
+  Returning `:ok` does not represent server-side acknowledgement.
+  """
+  @spec put_async(key(), value()) :: :ok
+  def put_async(key, value) do
+    put_async(Buraco.Server, key, value)
+  end
+
+  @doc """
+  Stores `value` under `key` asynchronously in the specified server.
+  """
+  @spec put_async(server(), key(), value()) :: :ok
+  def put_async(server, key, value) do
+    Buraco.Server.put_async(server, key, value)
+  end
+
+  @doc """
   Retrieves the value associated with `key`.
   Returns `nil` when the key does not exists.
   """

@@ -53,6 +53,14 @@ defmodule BuracoTest do
     end
   end
 
+  describe "put_async/3" do
+    test "stores a value asynchronously", %{server: server} do
+      assert :ok = Buraco.put_async(server, :language, "Elixir")
+
+      assert Buraco.get(server, :language) == "Elixir"
+    end
+  end
+
   describe "key independence" do
     test "different keys remain independent", %{server: server} do
       :ok = Buraco.put(server, :language, "Elixir")
