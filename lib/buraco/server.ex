@@ -51,6 +51,24 @@ defmodule Buraco.Server do
   end
 
   @doc """
+  Stores `value` under `key` asynchronously using the default server.
+
+  Returning `:ok` does not mean that server has already processed the write.
+  """
+  @spec put_async(term(), term()) :: :ok
+  def put_async(key, value) do
+    put_async(__MODULE__, key, value)
+  end
+
+  @doc """
+  Stores `value` under `key` asynchronously using `server`.
+  """
+  @spec put_async(server(), term(), term()) :: :ok
+  def put_async(server, key, value) do
+    GenServer.cast(server, {:put_async, key, value})
+  end
+
+  @doc """
   Deletes the value associated with `key` asynchronously.
 
   Deleting a key that does not exist leaves the store unchanged.
@@ -60,6 +78,11 @@ defmodule Buraco.Server do
     delete(__MODULE__, key)
   end
 
+  @doc """
+  Deletes `key` from `server`.
+
+  The function returns `:ok` after the server processes the deletion.
+  """
   @spec delete(server(), term()) :: :ok
   def delete(server, key) do
     GenServer.call(server, {:delete, key})
@@ -92,15 +115,8 @@ defmodule Buraco.Server do
   end
 
   @impl true
-  def handle_cast({:put, key, value}, state) do
+  def handle_cast({:put_async, key, value}, state) do
     new_state = Map.put(state, key, value)
-
-    {:noreply, new_state}
-  end
-
-  @impl true
-  def handle_cast({:delete, key}, state) do
-    new_state = Map.delete(state, key)
 
     {:noreply, new_state}
   end
