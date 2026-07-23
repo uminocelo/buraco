@@ -88,6 +88,19 @@ defmodule Buraco.Server do
     GenServer.call(server, {:delete, key})
   end
 
+  @doc """
+  Returns `key` exists in the default server.
+  """
+  @spec has_key?(term()) :: boolean()
+  def has_key?(key) do
+    has_key?(__MODULE__, key)
+  end
+
+  @spec has_key?(server(), term()) :: boolean()
+  def has_key?(server, key) do
+    GenServer.call(server, {:has_key?, key})
+  end
+
   @impl true
   def init(initial_state) do
     {:ok, initial_state}
@@ -112,6 +125,13 @@ defmodule Buraco.Server do
     new_state = Map.delete(state, key)
 
     {:reply, :ok, new_state}
+  end
+
+  @impl true
+  def handle_call({:has_key?, key}, _from, state) do
+    exists? = Map.has_key?(state, key)
+
+    {:reply, exists?, state}
   end
 
   @impl true
