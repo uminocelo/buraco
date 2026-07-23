@@ -114,6 +114,19 @@ defmodule Buraco.Server do
     GenServer.call(server, :size)
   end
 
+  @doc """
+  Retruns all keys from server
+  """
+  @spec keys() :: [term()]
+  def keys do
+    keys(__MODULE__)
+  end
+
+  @spec keys(server()) :: [term()]
+  def keys(server) do
+    GenServer.call(server, :keys)
+  end
+
   @impl true
   def init(initial_state) do
     {:ok, initial_state}
@@ -150,6 +163,13 @@ defmodule Buraco.Server do
   @impl true
   def handle_call(:size, _from, state) do
     {:reply, map_size(state), state}
+  end
+
+  @impl true
+  def handle_call(:keys, _from, state) do
+    keys = Map.keys(state)
+
+    {:reply, keys, state}
   end
 
   @impl true
