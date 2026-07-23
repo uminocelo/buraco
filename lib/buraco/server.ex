@@ -101,6 +101,19 @@ defmodule Buraco.Server do
     GenServer.call(server, {:has_key?, key})
   end
 
+  @doc """
+  Returns the number of entries in server.
+  """
+  @spec size() :: non_neg_integer()
+  def size do
+    size(__MODULE__)
+  end
+
+  @spec size(server()) :: non_neg_integer()
+  def size(server) do
+    GenServer.call(server, :size)
+  end
+
   @impl true
   def init(initial_state) do
     {:ok, initial_state}
@@ -132,6 +145,11 @@ defmodule Buraco.Server do
     exists? = Map.has_key?(state, key)
 
     {:reply, exists?, state}
+  end
+
+  @impl true
+  def handle_call(:size, _from, state) do
+    {:reply, map_size(state), state}
   end
 
   @impl true
