@@ -147,6 +147,16 @@ defmodule Buraco.Server do
     GenServer.call(server, :get_all)
   end
 
+  @spec clear() :: :ok
+  def clear do
+    clear(__MODULE__)
+  end
+
+  @spec clear(server()) :: :ok
+  def clear(server) do
+    GenServer.call(server, :clear)
+  end
+
   @impl true
   def init(initial_state) do
     {:ok, initial_state}
@@ -202,6 +212,11 @@ defmodule Buraco.Server do
   @impl true
   def handle_call(:get_all, _from, state) do
     {:reply, state, state}
+  end
+
+  @impl true
+  def handle_call(:clear, _from, _state) do
+    {:reply, :ok, %{}}
   end
 
   @impl true
