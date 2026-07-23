@@ -93,4 +93,100 @@ defmodule Buraco do
   def delete(server, key) do
     Buraco.Server.delete(server, key)
   end
+
+  @doc """
+  Returns whether `key` exists in the default store.
+  """
+  @spec has_key?(key()) :: boolean()
+  def has_key?(key) do
+    has_key?(Buraco.Server, key)
+  end
+
+  @doc """
+  Returns whether `key` exists in the specified store.
+  """
+  @spec has_key?(server(), key()) :: boolean()
+  def has_key?(server, key) do
+    Buraco.Server.has_key?(server, key)
+  end
+
+  @doc """
+  Returns the number of entries in the default store.
+  """
+  @spec size() :: non_neg_integer()
+  def size do
+    size(Buraco.Server)
+  end
+
+  @doc """
+  Returns the number of entries in the specified store.
+  """
+  @spec size(server()) :: non_neg_integer()
+  def size(server) do
+    Buraco.Server.size(server)
+  end
+
+  @doc """
+  Returns all keys in the default store.
+  """
+  @spec keys() :: [key()]
+  def keys do
+    keys(Buraco.Server)
+  end
+
+  @doc """
+  Returns all keys in the specified store.
+  """
+  @spec keys(server()) :: [key()]
+  def keys(server) do
+    Buraco.Server.keys(server)
+  end
+
+  @doc """
+  Returns all values in the default store.
+  """
+  @spec values() :: [value()]
+  def values do
+    values(Buraco.Server)
+  end
+
+  @doc """
+  Returns all values in the specified store.
+  """
+  @spec values() :: [value()]
+  def values(server) do
+    Buraco.Server.values(server)
+  end
+
+  @doc """
+  Returns all entries in the default store.
+  """
+  @spec get_all() :: %{optional(key()) => value()}
+  def get_all do
+    get_all(Buraco.Server)
+  end
+
+  @doc """
+  Returns all entries in the specified store.
+  """
+  @spec get_all(server()) :: %{optional(key()) => value()}
+  def get_all(server) do
+    Buraco.Server.get_all(server)
+  end
+
+  @doc """
+  Removes every entry from default store.
+  """
+  @spec clear() :: :ok
+  def clear do
+    clear(Buraco.Server)
+  end
+
+  @doc """
+  Removes every entry from specified store.
+  """
+  @spec clear(server()) :: :ok
+  def clear(server) do
+    Buraco.Server.clear(server)
+  end
 end
