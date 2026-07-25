@@ -191,4 +191,16 @@ defmodule BuracoTest do
       assert Buraco.size(server) == 2
     end
   end
+
+  describe "unexpected messages" do
+    test "preserves state and keeps the server alive", %{server: server} do
+      :ok = Buraco.put(server, :language, "Elixir")
+
+      send(server, {:unexpected, :hello})
+
+      assert "Elixir" = Buraco.get(server, :language)
+      assert Process.alive?(server)
+      assert Buraco.size(server) == 1
+    end
+  end
 end

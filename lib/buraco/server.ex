@@ -1,9 +1,11 @@
 defmodule Buraco.Server do
-  use GenServer
-
   @moduledoc """
     GenServer responsibable for maintaining the in-memory key-value store.
   """
+
+  use GenServer
+
+  require Logger
 
   @type server :: GenServer.server()
 
@@ -159,6 +161,10 @@ defmodule Buraco.Server do
 
   @impl true
   def init(initial_state) do
+    Logger.metadata(component: :buraco_server)
+
+    Logger.info("Buraco.Server initialized", initial_state: map_size(initial_state))
+
     {:ok, initial_state}
   end
 
@@ -215,7 +221,10 @@ defmodule Buraco.Server do
   end
 
   @impl true
-  def handle_call(:clear, _from, _state) do
+  def handle_call(:clear, _from, state) do
+    previous_size = map_size(state)
+    Logger.info("Buraco store cleared", previous_size: previous_size)
+
     {:reply, :ok, %{}}
   end
 
@@ -224,5 +233,26 @@ defmodule Buraco.Server do
     new_state = Map.put(state, key, value)
 
     {:noreply, new_state}
+  end
+
+  @impl true
+  def handle_info(message, state) do
+    Logger.warning(fn ->
+      "Buraco.Server received an unexpected message" <>
+        inspect(message, limit: 20, printable_limit: 200)
+    end)
+
+    {:noreply, state}
+  end
+
+  @impl true
+  def terminate(reason, state) do
+    Logger.info(fn ->
+      "Buraco.Server terminating: " <>
+        "reason=#{inspect(reason)}" <>
+        "size=#{map_size(state)}"
+    end)
+
+    :ok
   end
 end
