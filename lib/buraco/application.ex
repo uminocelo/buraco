@@ -1,7 +1,10 @@
 defmodule Buraco.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
-  @moduledoc false
+  @moduledoc """
+  Defines the OTP application entry point for Buraco.
+
+  This module starts the root supervisor, which owns and supervises
+  `Buraco.Server`.
+  """
 
   use Application
 

@@ -98,62 +98,89 @@ defmodule Buraco.Server do
     has_key?(__MODULE__, key)
   end
 
+  @doc """
+  Return whether `key` exists in `server`.
+  """
   @spec has_key?(server(), term()) :: boolean()
   def has_key?(server, key) do
     GenServer.call(server, {:has_key?, key})
   end
 
   @doc """
-  Returns the number of entries in server.
+  Returns the number of entries in the default server.
   """
   @spec size() :: non_neg_integer()
   def size do
     size(__MODULE__)
   end
 
+  @doc """
+  Returns the number of entries server.
+  """
   @spec size(server()) :: non_neg_integer()
   def size(server) do
     GenServer.call(server, :size)
   end
 
   @doc """
-  Retruns all keys from server
+  Retruns all keys from the default server
   """
   @spec keys() :: [term()]
   def keys do
     keys(__MODULE__)
   end
 
+  @doc """
+  Returns all keys from server.
+  """
   @spec keys(server()) :: [term()]
   def keys(server) do
     GenServer.call(server, :keys)
   end
 
+  @doc """
+  Returns all values from the default server.
+  """
   @spec values() :: [term()]
   def values do
     values(__MODULE__)
   end
 
+  @doc """
+  Returns all values from the server.
+  """
   @spec values(server()) :: [term()]
   def values(server) do
     GenServer.call(server, :values)
   end
 
+  @doc """
+  Returns all entries from default server
+  """
   @spec get_all() :: map()
   def get_all do
     get_all(__MODULE__)
   end
 
+  @doc """
+  Returns all entries from server
+  """
   @spec get_all(server()) :: map()
   def get_all(server) do
     GenServer.call(server, :get_all)
   end
 
+  @doc """
+  Removes every entry from default server
+  """
   @spec clear() :: :ok
   def clear do
     clear(__MODULE__)
   end
 
+  @doc """
+  Removes every entry from server
+  """
   @spec clear(server()) :: :ok
   def clear(server) do
     GenServer.call(server, :clear)
