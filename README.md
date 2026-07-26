@@ -40,7 +40,7 @@ mix --version
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-user>/buraco.git
+git clone https://github.com/uminocelo/buraco
 cd buraco
 ```
 
@@ -86,7 +86,7 @@ iex -S mix
 
 ```elixir
 Buraco.get(:language)
-# {:ok, "Elixir"}
+# "Elixir"
 ```
 
 A missing key returns:
@@ -102,7 +102,7 @@ This result format distinguishes a missing key from a key that stores `nil`:
 :ok = Buraco.put(:answer, nil)
 
 Buraco.get(:answer)
-# {:ok, nil}
+# nil
 
 Buraco.get(:missing)
 # :error
@@ -115,7 +115,7 @@ Buraco.get(:missing)
 :ok = Buraco.put(:language, "Erlang")
 
 Buraco.get(:language)
-# {:ok, "Erlang"}
+# "Erlang"
 ```
 
 ### Delete a value
@@ -216,7 +216,7 @@ For example:
 
 ```elixir
 case Buraco.get(:language) do
-  {:ok, language} ->
+  language ->
     IO.puts("Found #{language}")
 
   :error ->
